@@ -1,0 +1,147 @@
+background no
+use_xft yes
+font Terminus:size=8
+xftalpha 0.5
+update_interval 1
+total_run_times 0
+own_window yes
+own_window_type normal
+own_window_transparent yes
+own_window_argb_visual yes
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+double_buffer yes
+
+maximum_width 400
+draw_shades no
+draw_outline no
+draw_borders no
+draw_graph_borders no
+default_color white
+default_shade_color black
+default_outline_color green
+alignment top_right
+gap_x 10
+gap_y 0
+no_buffers yes
+uppercase no
+cpu_avg_samples 2
+net_avg_samples 2
+override_utf8_locale yes
+use_spacer no
+ 
+own_window_argb_value 0
+own_window_colour 000000
+minimum_size 250 0
+
+if_up_strictness address
+
+color0 dodgerblue3
+color1 EC0100
+color2 E9E101
+color3 18FF00
+color4 66aaff
+color5 777777
+color6 187700
+color7 770000
+
+TEXT
+${alignc}${font OCRA:size=10}$nodename
+${color0}${font OCRA:Bold:size=8}DATE ${color1}${hr 2}${font}${color}
+${alignc}${font OCRA:size=8}${time %a}, ${time %d %b %Y  %H:%M:%S}
+# SYSTEM
+${font Open Sans:Bold:size=10}${color0}SYSTEM ${color1}${hr 2}${font}${color}
+#Hostname $alignr $nodename
+OS $alignr ${exec cat -s /home/jb/OS-Ver}
+#OS $alignr ${color}${execi 360 lsb_release -sd} 
+Kernel $alignr $sysname $kernel  -  $machine
+Desktop $alignr $XDG_CURRENT_DESKTOP
+Uptime $alignr $uptime
+#Battery: $battery   ${color6}${battery_bar 4}
+Battery: ${if_match ${battery_percent BAT0}<=20}$color1}${blink ${battery BAT0}${battery_bar 4}$color}${else}${if_match ${battery_percent BAT0}<=25}${color1}${battery BAT0}${battery_bar 4}${else}${if_match ${battery_percent BAT0}<=39}${color2}${battery BAT0}${battery_bar 4}${else}${if_match ${battery_percent BAT0}>39}${color3}${battery BAT0}${color6}${battery_bar 4}${endif}${endif}${endif}${endif}${color}
+${voffset -13}${if_match ${battery_percent BAT0}<=28}Battery: $color7}${battery BAT0}${battery_bar 4}$color}${endif}${color}
+Battery_Time Remaining: ($acpiacadapter):${alignr}${if_empty ${battery_time BAT0}}--h --m --s${else}${battery_time BAT0}${endif}
+#ACPI $acpiacadapter
+
+# CPU
+${voffset -8}${font Open Sans:Bold:size=10}${color0}CPU ${color1}${hr 2}${font}${color}
+${alignc}${execi 1000 cat /proc/cpuinfo | grep 'model name' | sed -n 1p | sed -e  's/model name.*: //'}
+Core 0  ${color3}${freq 1}mhz  ${execi 5 /usr/bin/sensors | grep Core\ 0| paste -s | cut -d+ -f2 | cut -c1-7}   ${cpu cpu0}% ${color2}${cpubar 4 cpu0}
+${color}Core 1  ${color3}${freq 2}mhz  ${execi 5 /usr/bin/sensors | grep Core\ 1| paste -s | cut -d+ -f2 | cut -c1-7}   ${cpu cpu1}% ${color2}${cpubar 4 cpu1}
+${color}Core 2  ${color3}${freq 3}mhz  ${execi 5 /usr/bin/sensors | grep Core\ 2| paste -s | cut -d+ -f2 | cut -c1-7}   ${cpu cpu2}% ${color2}${cpubar 4 cpu2}
+${color}Core 3  ${color3}${freq 4}mhz  ${execi 5 /usr/bin/sensors | grep Core\ 3| paste -s | cut -d+ -f2 | cut -c1-7}   ${cpu cpu3}% ${color2}${cpubar 4 cpu3}${color}
+${voffset 5}Processes:$color $processes ${alignr}Running:$color $running_processes
+${color5}${voffset 0}${alignr}--------------------------------------${font Open Sans:Bold:size=8}${color0}PID${color5}${font}-----${font Open Sans:Bold:size=8}${color0}${voffset 0}RAM%${color5}${font}${voffset 0}---${font Open Sans:Bold:size=8}${color0}${voffset -0}CPU%${color}${font}${voffset -2}
+${top name 1}${alignr}${top cpu 1} 
+${voffset -13}${alignr}${offset -52}${top mem 1}
+${voffset -13}${alignr}${offset -99}${top pid 1}
+${top name 2}${alignr}${top cpu 2} 
+${voffset -13}${alignr}${offset -52}${top mem 2}
+${voffset -13}${alignr}${offset -99}${top pid 2}
+${top name 3}${alignr}${top cpu 3} 
+${voffset -13}${alignr}${offset -52}${top mem 3}
+${voffset -13}${alignr}${offset -99}${top pid 3}
+${top name 4}${alignr}${top cpu 4} 
+${voffset -13}${alignr}${offset -52}${top mem 4}
+${voffset -13}${alignr}${offset -99}${top pid 4}
+${top name 5}${alignr}${top cpu 5} 
+${voffset -13}${alignr}${offset -52}${top mem 5}
+${voffset -13}${alignr}${offset -99}${top pid 5}
+${top name 6}${alignr}${top cpu 6} 
+${voffset -13}${alignr}${offset -52}${top mem 6}
+${voffset -13}${alignr}${offset -99}${top pid 6}
+
+# MEMORY
+${voffset -8}${font Open Sans:Bold:size=10}${color0}MEMORY ${color1}${hr 2}
+${font}${color}${memperc}%   ${color2}${membar 4} 
+${color}${font Open Sans:size=8.5}Used:${alignr}${font} $mem of $memmax
+${font Open Sans:size=8.5}Free:$alignr$font $memeasyfree
+${font Open Sans:size=8.5}Buffers / Cached:$alignr$font$buffers / $cached
+Swap:  ${swapperc}% ${alignr}$swap/ $swapmax
+
+#${voffset -10}---------------------------------------------------------------${font Open #Sans:Bold:size=10}${color0}${voffset -2}RAM${color}${font}${voffset -2}-----${font Open #Sans:Bold:size=10}${color0}${voffset -2}CPU${color}${font}${voffset -2}----
+#${top_mem name 1}${alignr}${top_mem cpu 1} %
+#${voffset -13}${alignr}${offset -60}${top_mem mem 1} %
+#${top_mem name 2}${alignr}${top_mem cpu 2} %
+#${voffset -13}${alignr}${offset -60}${top_mem mem 2} %
+#${top_mem name 3}${alignr}${top_mem cpu 3} %
+#${voffset -13}${alignr}${offset -60}${top_mem mem 3} %
+#${top_mem name 4}${alignr}${top_mem cpu 4} %
+#${voffset -13}${alignr}${offset -60}${top_mem mem 4} %
+#GPU
+#${font Open Sans:Bold:size=10}${color0}GPU ${color1}${hr 2}${font}${color}
+#GTX+ 2050 (x2)  ${alignr}${exec nvidia-settings -q [thermalsensor:0]/ThermalSensorReading -t}°C    ${exec #nvidia-settings -q [gpu:0]/GPUCurrentClockFreqs -t} MHz 
+#
+# NETWORK
+${voffset -8}${font Open Sans:Bold:size=10}${color0}NETWORK ${color1}${hr 2}${color}
+${color0}${font Open Sans:bold:size=8.5}Ethernet ${font} ${alignr} ${color}${addr enp3s0}
+  ↑ ${upspeed enp3s0}  ${alignr} ${totalup enp3s0}
+${voffset -14}${alignc}${upspeedgraph enp3s0 10,120  ff0000 0000ff}
+  ↓ ${downspeed enp3s0}  $alignr ${totaldown enp3s0}
+${voffset -14}${alignc}${downspeedgraph enp3s0 10,120  ff0000 0000ff}
+
+${font Open Sans:bold:size=8}${color0}WiFi ${color}${font}${color}${font}${alignr}${addr wlp4s0}
+${alignr}${voffset -13}${offset -100}${wireless_bitrate wlp4s0}   Ch-${wireless_channel wlp4s0}
+${wireless_link_qual wlp4s0}%   ${color}${alignr}${tcp_ping http://checkip.dyndns.org/ 80}ms
+${voffset -13}${alignr}${offset -35}ping: 
+${voffset -13}${alignc}${offset -20}${color2}${wireless_link_bar 4,140 wlp4s0}${color}
+  ↑ ${upspeed wlp4s0}  $alignr ${totalup wlp4s0}
+${voffset -14}$alignc${upspeedgraph wlp4s0 10,120 ff0000 0000ff}
+  ↓ ${downspeed wlp4s0}  $alignr ${totaldown wlp4s0}
+${voffset -14}$alignc${downspeedgraph wlp4s0 10,120 ff0000 0000ff}
+${font Open Sans:size=8.5}${color}Gateway${color}${alignr}(${wireless_essid wlp4s0}) ${font} (${gw_iface})  ${gw_ip}
+${font Open Sans:size=8.5}Local / Public IP${color}${alignr}${font}${addrs lo}  / ${execi 3600 wget -q -O /dev/stdout http://checkip.dyndns.org/ | cut -d : -f 2- | cut -d \< -f -1}
+
+# HDD
+${voffset -8}${font Open Sans:Bold:size=10}${color0}DISKs ${color1}${hr 2}${font}${color}
+  /    <${fs_type /}>   ${alignr}${fs_used_perc /}% ${color2}${fs_bar 4,150 /}${color}
+    ${fs_used /} / ${fs_size /} ${alignr}R:${diskio_read /dev/sda}  
+${alignr}${voffset -13}${offset -70}W:${diskio_write /dev/sda}  
+  /sdb<${fs_type /sdb2}>   ${alignr}${fs_used_perc /dev/sdb2}% ${color2}${fs_bar 4,150 /dev/sdb2}${color}
+    ${fs_used /dev/sdb2} / ${fs_size /dev/sdb2} ${alignr}R:${diskio_read /dev/sdb2}  
+${alignr}${voffset -13}${offset -70}W:${diskio_write /dev/sdb2}
+
+${voffset -8}${font Open Sans:Bold:size=10}${color0}Temps & Fans ${color1}${hr 2}${font}${color}
+
+${voffset -8}HDD Temps ${alignr}${color3}SDA:${color} ${exec hddtemp /dev/sda -n --unit=C}°   ${color3}SDB: ${color}${exec hddtemp /dev/sdb2 -n --unit=C}°${color} 
+Fans   $acpifan${alignr}${color3}${if_empty ${i2c fan 1}}----${else}${i2c fan 1}${endif} RPM ${hwmon 3 fan 1} RPM ${hwmon 3 fan 1} RPM
+${color1}${hr 1}
